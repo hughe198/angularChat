@@ -1,0 +1,22 @@
+.chat-window {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .chat-window input, .chat-window button {
+    margin: 5px;
+  }
+  
+  .chat-window ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .chat-window li {
+    margin: 5px;
+    padding: 10px;
+    background-color: #f3f3f3;
+    width: fit-content;
+  }
+  
