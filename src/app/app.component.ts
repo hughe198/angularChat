@@ -4,6 +4,7 @@ import { RouterOutlet } from '@angular/router';
 import { WebsocketService } from './chat-service.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Message } from '../message';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -11,30 +12,23 @@ import { CommonModule } from '@angular/common';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent{
+export class AppComponent implements OnInit{
   title = 'angularChat';
   message = '';
-  messages:string[] = []
-  private messagesSubscription:Subscription;
-
-  constructor(private websocketService:WebsocketService){
-    this.messagesSubscription = this.websocketService.getMessages().subscribe({
-      next:(msg:string)=>{this.messages.push(msg)},
-      error: (error: any) => console.error('WebSocket error:', error),
-      complete: () => console.log('WebSocket connection completed')
+  name = "";
+  messages:Message[] = []
+  constructor(private websocketService:WebsocketService){}
+  ngOnInit(): void {
+    this.websocketService.getMessages().subscribe((msg:Message)=>{
+      this.messages.push(msg)
     })
   }
+
+
   sendMessage(): void {
     if (this.message.trim()) {
-      this.websocketService.sendMessage(this.message);
+      this.websocketService.sendMessage(this.message,this.name);
       this.message = ''; // Clear the input after sending
     }
-  }
-
-  ngOnDestroy(): void {
-    if (this.messagesSubscription) {
-      this.messagesSubscription.unsubscribe();
-    }
-    this.websocketService.closeConnection();
   }
 }
